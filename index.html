@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TON Receipt</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+body{
+    margin:0;
+    background:#f2f2f2;
+    font-family: Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+#receipt{
+    width:700px;
+    height:280px;
+    background:linear-gradient(to right,#e5e5e5,#d6dde5);
+    border-radius:15px;
+    padding:40px;
+    position:relative;
+}
+
+.amount{
+    font-size:65px;
+    font-weight:bold;
+}
+
+.username{
+    font-size:30px;
+    margin-top:10px;
+}
+
+.success{
+    background:#d4edda;
+    color:#155724;
+    padding:6px 18px;
+    border-radius:20px;
+    display:inline-block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+.transaction{
+    position:absolute;
+    bottom:20px;
+    left:40px;
+    color:#777;
+}
+
+.botname{
+    position:absolute;
+    bottom:20px;
+    right:40px;
+    color:#777;
+}
+
+.logo{
+    position:absolute;
+    top:35px;
+    right:40px;
+    width:95px;
+}
+.download-btn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    padding:10px 15px;
+    background:#1e90ff;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div id="receipt">
+    <img src="logo.png" class="logo">
+    <div class="amount" id="amount"></div>
+    <div class="username" id="username"></div>
+    <div class="success">Payout successful</div>
+    <div class="transaction" id="datetime"></div>
+    <div class="botname">@TonCloudeBot</div>
+</div>
+
+<button class="download-btn" onclick="downloadImage()">Download PNG</button>
+
+<script>
+function getURLData(){
+    // URL format:
+    // domain.com/amount/username/date/time
+
+    let path = window.location.pathname.split("/").filter(Boolean);
+
+    let amount = path[0] || "0.000";
+    let username = path[1] || "@username";
+    let date = path[2] || "2026-01-01";
+    let time = path[3] || "00:00";
+
+    document.getElementById("amount").innerText = amount + " TON";
+    document.getElementById("username").innerText = username;
+    document.getElementById("datetime").innerText =
+        "Transaction · " + date + ", " + time + " UTC";
+}
+
+getURLData();
+
+function downloadImage(){
+    html2canvas(document.getElementById("receipt")).then(canvas=>{
+        let link = document.createElement("a");
+        link.download = "receipt.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+</script>
+
+</body>
+</html>
